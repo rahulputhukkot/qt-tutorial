@@ -21,20 +21,37 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
 
         self.setWindowTitle("My App")
-       
-        listwidget = QListWidget()
-        listwidget.addItems(["One", "Two", "Three"])
 
-        listwidget.currentItemChanged.connect(self.item_changed)
-        listwidget.currentTextChanged.connect(self.text_changed)
-        self.setCentralWidget(listwidget)
+        self.lineedit = QLineEdit()
+        self.lineedit.setMaxLength(15)
+        self.lineedit.setPlaceholderText("Enter your text")
+        
+        self.lineedit.returnPressed.connect(self.return_pressed)
+        self.lineedit.selectionChanged.connect(self.selection_changed)
+        self.lineedit.textChanged.connect(self.text_changed)
+        self.lineedit.textEdited.connect(self.text_edited)
+        # validation only numbers 4 sets of 3 numbers seperated by . and blanks are shown as _
+        # https://doc.qt.io/qt-6/qlineedit.html#inputMask-prop
+        self.lineedit.setInputMask('000.000.000.000;_')
+
+        self.setCentralWidget(self.lineedit)
     
-    def item_changed(self, item):
-        # Here in this case the QListWidget item is sent instead of the index
-        print('Item changed:', item.text())
+    def return_pressed(self):
+        print("Return pressed")
+        self.lineedit.setText("KABOOOMM!!!")
     
+    def selection_changed(self):
+        print("Selection changed")
+        print(self.lineedit.selectedText())
+
     def text_changed(self, text):
-        print('Text changed', text)
+        print("Text changed")
+        print(text)
+
+    def text_edited(self, text):
+        print("Text edited")
+        print(text)
+
 
 app = QApplication(sys.argv)
 
