@@ -22,21 +22,16 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("My App")
        
-        combobox = QComboBox()
-        combobox.setEditable(True)
-        combobox.addItems(["One", "Two", "Three"])
-        combobox.setInsertPolicy(QComboBox.InsertAlphabetically)
-        combobox.setMaxCount(10)
+        listwidget = QListWidget()
+        listwidget.addItems(["One", "Two", "Three"])
 
-        # The default signal sent by the currentIndexChanged is the index
-        combobox.currentIndexChanged.connect(self.index_changed)
-        # The same signal can send a text string as well
-        combobox.currentTextChanged.connect(self.text_changed)
-        
-        self.setCentralWidget(combobox)
+        listwidget.currentItemChanged.connect(self.item_changed)
+        listwidget.currentTextChanged.connect(self.text_changed)
+        self.setCentralWidget(listwidget)
     
-    def index_changed(self, index):
-        print('Index changed:', index)
+    def item_changed(self, item):
+        # Here in this case the QListWidget item is sent instead of the index
+        print('Item changed:', item.text())
     
     def text_changed(self, text):
         print('Text changed', text)
