@@ -9,13 +9,16 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.show()
 
-    def contextMenuEvent(self, event: QContextMenuEvent) -> None:
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.on_context_menu)
+
+    def on_context_menu(self, pos) -> None:
         context = QMenu(self)
         context.addAction(QAction("test 1", self))
         context.addAction(QAction("test 2", self))
         context.addAction(QAction("test 3", self))
         context.addAction(QAction("test 4", self))
-        context.exec_(event.globalPos())
+        context.exec(self.mapToGlobal(pos))
 
 
 app = QApplication(sys.argv)
@@ -23,4 +26,4 @@ app = QApplication(sys.argv)
 window = MainWindow()
 window.show()
 
-app.exec_()
+app.exec()
