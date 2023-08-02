@@ -1,0 +1,1 @@
+Reference - https://www.pythonguis.com/tutorials/pyside6-creating-your-first-window/
