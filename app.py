@@ -22,17 +22,24 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("My App")
        
-        checkbox = QCheckBox()
-        # checkbox.setCheckState(Qt.CheckState.Checked)
+        combobox = QComboBox()
+        combobox.setEditable(True)
+        combobox.addItems(["One", "Two", "Three"])
+        combobox.setInsertPolicy(QComboBox.InsertAlphabetically)
+        combobox.setMaxCount(10)
 
-        checkbox.setTristate(True)
-
-        checkbox.stateChanged.connect(self.show_state)
-        self.setCentralWidget(checkbox)
+        # The default signal sent by the currentIndexChanged is the index
+        combobox.currentIndexChanged.connect(self.index_changed)
+        # The same signal can send a text string as well
+        combobox.currentTextChanged.connect(self.text_changed)
+        
+        self.setCentralWidget(combobox)
     
-    def show_state(self, state):
-        print(state == Qt.CheckState.Checked.value)
-        print(state)
+    def index_changed(self, index):
+        print('Index changed:', index)
+    
+    def text_changed(self, text):
+        print('Text changed', text)
 
 app = QApplication(sys.argv)
 
