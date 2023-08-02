@@ -1,61 +1,37 @@
 import sys
 
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (
     QApplication,
     QCheckBox,
     QComboBox,
-    QDateEdit,
-    QDateTimeEdit,
     QDial,
     QDoubleSpinBox,
-    QFontComboBox,
     QLabel,
-    QLCDNumber,
     QLineEdit,
+    QListWidget,
     QMainWindow,
-    QProgressBar,
-    QPushButton,
-    QRadioButton,
     QSlider,
-    QSpinBox,
-    QTimeEdit,
-    QVBoxLayout,
-    QWidget    
+    QSpinBox
 )
 
 class MainWindow(QMainWindow):
     def  __init__(self):
-        super().__init__()
+        super(MainWindow, self).__init__()
         self.show()
 
-        self.setWindowTitle("Widgets App")
-
-        layout = QVBoxLayout()
-        widgets = [
-            QCheckBox,
-            QComboBox,
-            QDateEdit,
-            QDateTimeEdit,
-            QDial,
-            QDoubleSpinBox,
-            QFontComboBox,
-            QLCDNumber,
-            QLabel,
-            QLineEdit,
-            QProgressBar,
-            QPushButton,
-            QRadioButton,
-            QSlider,
-            QSpinBox,
-            QTimeEdit,
-        ]
-
-        for widget in widgets:
-            layout.addWidget(widget())
-        central_widget = QWidget()
-        central_widget.setLayout(layout)
-
-        self.setCentralWidget(central_widget)
+        self.setWindowTitle("My App")
+        label = QLabel("Hello")
+        font = label.font()
+        font.setPointSize(30)
+        label.setFont(font)
+        label.setAlignment(
+            Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter
+        )
+        self.setCentralWidget(label)
+        # Setting an image as the label
+        label.setPixmap(QPixmap('../logo.png'))
 
 
 app = QApplication(sys.argv)
