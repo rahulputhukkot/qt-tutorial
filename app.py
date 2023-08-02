@@ -22,37 +22,31 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("My App")
 
-        self.lineedit = QLineEdit()
-        self.lineedit.setMaxLength(15)
-        self.lineedit.setPlaceholderText("Enter your text")
-        
-        self.lineedit.returnPressed.connect(self.return_pressed)
-        self.lineedit.selectionChanged.connect(self.selection_changed)
-        self.lineedit.textChanged.connect(self.text_changed)
-        self.lineedit.textEdited.connect(self.text_edited)
-        # validation only numbers 4 sets of 3 numbers seperated by . and blanks are shown as _
-        # https://doc.qt.io/qt-6/qlineedit.html#inputMask-prop
-        self.lineedit.setInputMask('000.000.000.000;_')
+        spinbox = QSpinBox()
+        # doblespinbox = QDoubleSpinBox()
 
-        self.setCentralWidget(self.lineedit)
-    
-    def return_pressed(self):
-        print("Return pressed")
-        self.lineedit.setText("KABOOOMM!!!")
-    
-    def selection_changed(self):
-        print("Selection changed")
-        print(self.lineedit.selectedText())
+        spinbox.lineEdit().setReadOnly(True)
 
+        spinbox.setMinimum(-10)
+        spinbox.setMaximum(3)
+        # doublespinbox.setRange(-10, 3)
+
+        spinbox.setPrefix("£")
+        spinbox.setSuffix("c")
+        spinbox.setSingleStep(3)
+        # Or e.g. 0.5 for QDoublespinbox
+
+        spinbox.valueChanged.connect(self.value_changed)
+        spinbox.textChanged.connect(self.text_changed)
+
+        self.setCentralWidget(spinbox)
+    
+    def value_changed(self, value):
+        print("Value:", value)
+    
     def text_changed(self, text):
-        print("Text changed")
-        print(text)
-
-    def text_edited(self, text):
-        print("Text edited")
-        print(text)
-
-
+        print("Text:", text)
+    
 app = QApplication(sys.argv)
 
 window = MainWindow()
