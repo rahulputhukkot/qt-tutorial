@@ -18,35 +18,33 @@ from PySide6.QtWidgets import (
 
 class MainWindow(QMainWindow):
     def  __init__(self):
-        super(MainWindow, self).__init__()
+        super().__init__()
 
         self.setWindowTitle("My App")
+        
+        slider = QSlider(Qt.Orientation.Horizontal)
+        slider.setRange(-10,3)     
+        slider.setSingleStep(3)
 
-        spinbox = QSpinBox()
-        # doblespinbox = QDoubleSpinBox()
-
-        spinbox.lineEdit().setReadOnly(True)
-
-        spinbox.setMinimum(-10)
-        spinbox.setMaximum(3)
-        # doublespinbox.setRange(-10, 3)
-
-        spinbox.setPrefix("£")
-        spinbox.setSuffix("c")
-        spinbox.setSingleStep(3)
-        # Or e.g. 0.5 for QDoublespinbox
-
-        spinbox.valueChanged.connect(self.value_changed)
-        spinbox.textChanged.connect(self.text_changed)
-
-        self.setCentralWidget(spinbox)
+        slider.valueChanged.connect(self.value_changed)
+        slider.sliderMoved.connect(self.slider_position)
+        slider.sliderPressed.connect(self.slider_pressed)
+        slider.sliderReleased.connect(self.slider_released)
+    
+        self.setCentralWidget(slider)
     
     def value_changed(self, value):
         print("Value:", value)
     
-    def text_changed(self, text):
-        print("Text:", text)
+    def slider_position(self, position):
+        print("Text:", position)
     
+    def slider_pressed(self):
+        print("Slider Pressed")
+
+    def slider_released(self):
+        print("Slider Released")
+
 app = QApplication(sys.argv)
 
 window = MainWindow()
