@@ -19,20 +19,20 @@ from PySide6.QtWidgets import (
 class MainWindow(QMainWindow):
     def  __init__(self):
         super(MainWindow, self).__init__()
-        self.show()
 
         self.setWindowTitle("My App")
-        label = QLabel("Hello")
-        font = label.font()
-        font.setPointSize(30)
-        label.setFont(font)
-        label.setAlignment(
-            Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter
-        )
-        self.setCentralWidget(label)
-        # Setting an image as the label
-        label.setPixmap(QPixmap('../logo.png'))
+       
+        checkbox = QCheckBox()
+        # checkbox.setCheckState(Qt.CheckState.Checked)
 
+        checkbox.setTristate(True)
+
+        checkbox.stateChanged.connect(self.show_state)
+        self.setCentralWidget(checkbox)
+    
+    def show_state(self, state):
+        print(state == Qt.CheckState.Checked.value)
+        print(state)
 
 app = QApplication(sys.argv)
 
