@@ -1,53 +1,52 @@
 import sys
+from typing import Optional
+import PySide6.QtCore
+from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout
+from PySide6.QtGui import QPalette, QColor
 
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import (
-    QApplication,
-    QCheckBox,
-    QComboBox,
-    QDial,
-    QDoubleSpinBox,
-    QLabel,
-    QLineEdit,
-    QListWidget,
-    QMainWindow,
-    QSlider,
-    QSpinBox
-)
+class Color(QWidget):
 
-class MainWindow(QMainWindow):
-    def  __init__(self):
+    def __init__(self, color):
         super().__init__()
+        self.setAutoFillBackground(True)
+
+        palette = self.palette()
+        palette.setColor(QPalette.Window, QColor(color))
+        self.setPalette(palette)
+class MainWindow(QMainWindow):
+
+    def __init__(self):
+        super(MainWindow, self).__init__()
 
         self.setWindowTitle("My App")
         
-        dial = QDial()
-        dial.setRange(-10,100)     
-        dial.setSingleStep(1)
+        # layout = QVBoxLayout()
+        layout1 = QHBoxLayout()
+        layout2 = QVBoxLayout()
+        layout3 = QVBoxLayout()
+        
+        layout2.addWidget(Color('red'))
+        layout2.addWidget(Color('yellow'))
+        layout2.addWidget(Color('purple'))
 
-        dial.valueChanged.connect(self.value_changed)
-        dial.sliderMoved.connect(self.dial_position)
-        dial.sliderPressed.connect(self.dial_pressed)
-        dial.sliderReleased.connect(self.dial_released)
-    
-        self.setCentralWidget(dial)
-    
-    def value_changed(self, value):
-        print("Value:", value)
-    
-    def dial_position(self, position):
-        print("Text:", position)
-    
-    def dial_pressed(self):
-        print("Pressed")
+        layout1.addLayout(layout2)
+        layout1.addWidget(Color('green'))
 
-    def dial_released(self):
-        print("Released")
+        layout3.addWidget(Color('red'))
+        layout3.addWidget(Color('purple'))
+
+        layout1.addLayout(layout3)
+        layout1.setContentsMargins(0,0,0,0)
+        layout1.setSpacing(20)
+
+        widget = QWidget()
+        widget.setLayout(layout1)
+
+        self.setCentralWidget(widget)
 
 app = QApplication(sys.argv)
 
 window = MainWindow()
 window.show()
 
-app.exec()
+app.exec_()
