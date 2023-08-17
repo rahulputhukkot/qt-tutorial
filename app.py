@@ -1,43 +1,52 @@
 import sys
-from typing import Optional
-import PySide6.QtCore
-from PySide6.QtGui import QPalette, QColor
 from PySide6.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QPushButton,
-    QTabWidget,
-    QWidget
-    )
-
-class Color(QWidget):
-
-    def __init__(self, color):
-        super().__init__()
-        self.setAutoFillBackground(True)
-
-        palette = self.palette()
-        palette.setColor(QPalette.Window, QColor(color))
-        self.setPalette(palette)
+    QMainWindow, QApplication, QCheckBox,
+    QLabel, QToolBar, QStatusBar
+)
+from PySide6.QtGui import QAction, QIcon
+from PySide6.QtCore import Qt, QSize
 
 class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
 
-        self.setWindowTitle("My App")
+  def __init__(self):
+    super(MainWindow, self).__init__()
 
-        tabs = QTabWidget()
-        tabs.setTabPosition(QTabWidget.West)
-        tabs.setMovable(True)
+    self.setWindowTitle("My Awesome App")
 
-        for color in (["red", "green", "blue", "yellow"]):
-            tabs.addTab(Color(color), color)
-        
-        self.setCentralWidget(tabs)
+    label = QLabel("Hello")
+    label.setAlignment(Qt.AlignCenter)
+
+    self.setCentralWidget(label)
+
+    toolbar = QToolBar("My main toolbar")
+    toolbar.setIconSize(QSize(16, 16))
+    self.addToolBar(toolbar)
+
+    #NOTE: QAction needs a QObject passed as a parameter to act as the parent for the action
+    # in this case we pass self to have the QMainWindow as its parent
+    button_action = QAction(QIcon("icons/acorn.png"),"Your Button", self)
+    button_action.setStatusTip( "This is your button")
+    button_action.triggered.connect(self.onMyToolBarButtonCLick)
+    button_action.setCheckable(True) # This makes the button in the toolbar togglable 
+    toolbar.addAction(button_action)
+
+    toolbar.addSeparator()
+
+    button_action_2 = QAction(QIcon("icons/android.png"), "Second Button", self)
+    button_action_2.setStatusTip("This is the second button")
+    button_action_2.triggered.connect(self.onMyToolBarButtonCLick)
+    button_action_2.setCheckable(True)
+    toolbar.addAction(button_action_2)
+
+    toolbar.addWidget(QLabel("Hello"))
+    toolbar.addWidget(QCheckBox())
+
+    self.setStatusBar(QStatusBar(self))
+
+  def onMyToolBarButtonCLick(self, s):
+    print('onMyToolbarButtonClick',s)
 
 app = QApplication(sys.argv)
-
-window = MainWindow()
-window.show()
-
-app.exec_()
+w = MainWindow()
+w.show()
+app.exec()
