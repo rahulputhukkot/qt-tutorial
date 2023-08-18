@@ -1,38 +1,12 @@
-"""
-REF: https://www.pythonguis.com/tutorials/pyside6-dialogs/
-"""
-
 import sys
 
 from PySide6.QtWidgets import (
-  QApplication,
-  QDialog,
-  QDialogButtonBox,
-  QLabel,
-  QMainWindow,
-  QPushButton,
-  QVBoxLayout
+    QApplication,
+    QDialog,
+    QMainWindow,
+    QMessageBox,
+    QPushButton,
 )
-
-class CustomDialog(QDialog):
-  # Passing a parent object so that this window appears near the parent object in this case the mainwindow 
-  def __init__(self, parent=None):
-    super().__init__(parent)
-
-    self.setWindowTitle("Hello this is a custom modal")
-
-    QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
-
-    self.buttonBox = QDialogButtonBox(QBtn)
-    self.buttonBox.accepted.connect(self.accept)
-    self.buttonBox.rejected.connect(self.reject)
-
-    self.layout = QVBoxLayout()
-    message = QLabel("Something happened is that OK?")
-    self.layout.addWidget(message)
-    self.layout.addWidget(self.buttonBox)
-    self.setLayout(self.layout)
-
 
 
 class MainWindow(QMainWindow):
@@ -46,15 +20,33 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(button)
 
     def button_clicked(self, s):
-        print("click", s)
+        dlg = QMessageBox(self)
+        dlg.setWindowTitle("I have a question!")
+        dlg.setText("This is a simple dialog")
+        dlg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        dlg.setIcon(QMessageBox.Question)
+        
+        # button = dlg.exec()
+        
+        # if button == QMessageBox.Yes:
+        #     print("Yes!")
+        # else:
+        #     print("No!")
 
-        # pass the parent as the parameter to the custom dialog to make it appear near the parent
-        dlg = CustomDialog(self) 
-        if  dlg.exec():
-           print('Success!!')
-        else :
-           print("Cancel!")
-
+        # button = QMessageBox.question(self, "Question dialog", "The longer message")
+        button = QMessageBox.critical(
+            self,
+            "Oh dear!",
+            "Something went wrong",
+            buttons = QMessageBox.Discard | QMessageBox.NoToAll | QMessageBox.Ignore,
+            defaultButton=QMessageBox.Discard,
+        )
+        if button == QMessageBox.Discard:
+            print("Discard!")
+        elif button == QMessageBox.NoToAll:
+            print("No to All")
+        else:
+            print("Ignored.")
 
 app = QApplication(sys.argv)
 
