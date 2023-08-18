@@ -41,8 +41,10 @@ class MainWindow(QMainWindow):
             # check if already a window exist then use that 
             # one instead of creating a new one
             self.w = AnotherWindow() 
-
-        self.w.show() 
+            self.w.show()
+        else: 
+            self.w.close() # closes the window
+            self.w = None # discard the reference
 
 
 app = QApplication(sys.argv)
