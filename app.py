@@ -27,25 +27,18 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.w = None
+        # creating the window in the __init__ block of the main window
+        # makes it a persistant window
+        self.w = AnotherWindow() 
         self.button = QPushButton("Push for Window")
-        self.button.clicked.connect(self.show_new_window)
+        self.button.clicked.connect(self.toggle_window)
         self.setCentralWidget(self.button)
 
-    def show_new_window(self, checked):
-        """ if we dont use self.w the window would only be displayed for a fraction 
-        of a second its due to the reason that the dialog exist only inside the 
-        funciton as soon as the its exited from the funciton value is lost due
-        to garbage collection so we need to save this in some variable
-        """
-        if self.w is None:
-            # check if already a window exist then use that 
-            # one instead of creating a new one
-            self.w = AnotherWindow() 
+    def toggle_window(self, checked):
+        if self.w.isVisible():
+            self.w.hide()
+        else:
             self.w.show()
-        else: 
-            self.w.close() # closes the window
-            self.w = None # discard the reference
-
 
 app = QApplication(sys.argv)
 w = MainWindow()
