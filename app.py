@@ -1,56 +1,51 @@
-import sys
+"""
+REF: https://www.pythonguis.com/tutorials/pyside6-creating-multiple-windows/
+"""
 
-from PySide6.QtWidgets import (
-    QApplication,
-    QDialog,
-    QMainWindow,
-    QMessageBox,
-    QPushButton,
-)
+import sys
+from random import randint
+from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QWidget
+
+
+class AnotherWindow(QWidget):
+    """
+    This "window" is a QWidget. If it has no parent, it
+    will appear as a free-floating window as we want.
+    """
+    def __init__(self):
+        super().__init__()
+        layout = QVBoxLayout()
+        self.label = QLabel("Another Window % d" % randint(0,100))
+        # This shows that each time the button is pressed the current window
+        #  is destroyed and a new one is created
+        layout.addWidget(self.label)
+        self.setLayout(layout)
 
 
 class MainWindow(QMainWindow):
+
     def __init__(self):
         super().__init__()
+        self.w = None
+        self.button = QPushButton("Push for Window")
+        self.button.clicked.connect(self.show_new_window)
+        self.setCentralWidget(self.button)
 
-        self.setWindowTitle("My App")
+    def show_new_window(self, checked):
+        """ if we dont use self.w the window would only be displayed for a fraction 
+        of a second its due to the reason that the dialog exist only inside the 
+        funciton as soon as the its exited from the funciton value is lost due
+        to garbage collection so we need to save this in some variable
+        """
+        if self.w is None:
+            # check if already a window exist then use that 
+            # one instead of creating a new one
+            self.w = AnotherWindow() 
 
-        button = QPushButton("Press me for a dialog!")
-        button.clicked.connect(self.button_clicked)
-        self.setCentralWidget(button)
+        self.w.show() 
 
-    def button_clicked(self, s):
-        dlg = QMessageBox(self)
-        dlg.setWindowTitle("I have a question!")
-        dlg.setText("This is a simple dialog")
-        dlg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-        dlg.setIcon(QMessageBox.Question)
-        
-        # button = dlg.exec()
-        
-        # if button == QMessageBox.Yes:
-        #     print("Yes!")
-        # else:
-        #     print("No!")
-
-        # button = QMessageBox.question(self, "Question dialog", "The longer message")
-        button = QMessageBox.critical(
-            self,
-            "Oh dear!",
-            "Something went wrong",
-            buttons = QMessageBox.Discard | QMessageBox.NoToAll | QMessageBox.Ignore,
-            defaultButton=QMessageBox.Discard,
-        )
-        if button == QMessageBox.Discard:
-            print("Discard!")
-        elif button == QMessageBox.NoToAll:
-            print("No to All")
-        else:
-            print("Ignored.")
 
 app = QApplication(sys.argv)
-
-window = MainWindow()
-window.show()
-
+w = MainWindow()
+w.show()
 app.exec()
