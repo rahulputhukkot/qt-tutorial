@@ -1,10 +1,10 @@
 
+from PySide6.QtCharts import (QChart, QChartView, QDateTimeAxis, QLineSeries,
+                            QValueAxis)
 from PySide6.QtCore import QDateTime, Qt
 from PySide6.QtGui import QPainter
-from PySide6.QtWidgets import (QWidget, QHeaderView, QHBoxLayout, QTableView,
-                               QSizePolicy)
-from PySide6.QtCharts import QChart, QChartView, QLineSeries, QDateTimeAxis, QValueAxis
-
+from PySide6.QtWidgets import (QHBoxLayout, QHeaderView, QSizePolicy,
+                            QSplitter, QTableView, QWidget)
 from table_model import CustomTableModel
 
 
@@ -42,18 +42,21 @@ class Widget(QWidget):
         self.main_layout = QHBoxLayout()
         size = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
 
-        # Left layout
-        size.setHorizontalStretch(1)
+        # Added splitter to the window to adjust the size on runtime
+        self.splitter = QSplitter(self)
+        self.splitter.setOrientation(Qt.Horizontal)
+        
         self.table_view.setSizePolicy(size)
-        self.main_layout.addWidget(self.table_view)
+        size.setHorizontalStretch(1)
+        self.splitter.addWidget(self.table_view)
 
-        # Right Layout
-        size.setHorizontalStretch(4)
         self.chart_view.setSizePolicy(size)
-        self.main_layout.addWidget(self.chart_view)
-
-        # Set the layout to the QWidget
+        size.setHorizontalStretch(4)
+        self.splitter.addWidget(self.chart_view)
+        
+        self.main_layout.addWidget(self.splitter)
         self.setLayout(self.main_layout)
+        
 
     def add_series(self, name, columns):
         # Create QLineSeries
